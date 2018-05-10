@@ -1,0 +1,50 @@
+andersen_thermostat.o: andersen_thermostat.F90 allocate.h assert.h _mod_ranlux _mod_tempprofile _mod_mdcommon _mod_accuracy
+andersen_thermostat.o = andersen_thermostat.o $(allocate.h) $(assert.h) $(_mod_ranlux) $(_mod_tempprofile) $(_mod_mdcommon) $(_mod_accuracy)
+_mod_andersenthermostat: andersen_thermostat.o
+_mod_andersenthermostat = $(andersen_thermostat.o)
+
+berendsen_thermostat.o: berendsen_thermostat.F90 allocate.h assert.h _mod_ranlux _mod_tempprofile _mod_mdcommon _mod_accuracy
+berendsen_thermostat.o = berendsen_thermostat.o $(allocate.h) $(assert.h) $(_mod_ranlux) $(_mod_tempprofile) $(_mod_mdcommon) $(_mod_accuracy)
+_mod_berendsenthermostat: berendsen_thermostat.o
+_mod_berendsenthermostat = $(berendsen_thermostat.o)
+
+dummy_thermostat.o: dummy_thermostat.F90 _mod_accuracy _mod_mdcommon assert.h allocate.h _mod_ranlux
+dummy_thermostat.o = dummy_thermostat.o $(_mod_accuracy) $(_mod_mdcommon) $(assert.h) $(allocate.h) $(_mod_ranlux)
+_mod_dummythermostat: dummy_thermostat.o
+_mod_dummythermostat = $(dummy_thermostat.o)
+
+integrators.o: integrators.F90 _mod_constants assert.h _mod_ranlux _mod_message _mod_accuracy allocate.h
+integrators.o = integrators.o $(_mod_constants) $(assert.h) $(_mod_ranlux) $(_mod_message) $(_mod_accuracy) $(allocate.h)
+_mod_integrator: integrators.o
+_mod_integrator = $(integrators.o)
+
+md_common.o: md_common.F90 _mod_accuracy _mod_ranlux assert.h allocate.h _mod_constants
+md_common.o = md_common.o $(_mod_accuracy) $(_mod_ranlux) $(assert.h) $(allocate.h) $(_mod_constants)
+_mod_mdcommon: md_common.o
+_mod_mdcommon = $(md_common.o)
+
+md_integrator.o: md_integrator.F90 _mod_accuracy assert.h allocate.h _mod_velocityverlet
+md_integrator.o = md_integrator.o $(_mod_accuracy) $(assert.h) $(allocate.h) $(_mod_velocityverlet)
+_mod_mdintegrator: md_integrator.o
+_mod_mdintegrator = $(md_integrator.o)
+
+nhc_thermostat.o: nhc_thermostat.F90 _mod_energies allocate.h assert.h _mod_ranlux _mod_tempprofile _mod_message _mod_mdcommon _mod_accuracy
+nhc_thermostat.o = nhc_thermostat.o $(_mod_energies) $(allocate.h) $(assert.h) $(_mod_ranlux) $(_mod_tempprofile) $(_mod_message) $(_mod_mdcommon) $(_mod_accuracy)
+_mod_nhcthermostat: nhc_thermostat.o
+_mod_nhcthermostat = $(nhc_thermostat.o)
+
+temp_profile.o: temp_profile.F90 _mod_accuracy assert.h allocate.h
+temp_profile.o = temp_profile.o $(_mod_accuracy) $(assert.h) $(allocate.h)
+_mod_tempprofile: temp_profile.o
+_mod_tempprofile = $(temp_profile.o)
+
+thermostat.o: thermostat.F90 allocate.h _mod_berendsenthermostat _mod_nhcthermostat _mod_andersenthermostat _mod_dummythermostat _mod_accuracy
+thermostat.o = thermostat.o $(allocate.h) $(_mod_berendsenthermostat) $(_mod_nhcthermostat) $(_mod_andersenthermostat) $(_mod_dummythermostat) $(_mod_accuracy)
+_mod_thermostat: thermostat.o
+_mod_thermostat = $(thermostat.o)
+
+velocity_verlet.o: velocity_verlet.F90 allocate.h _mod_fileid _mod_thermostat _mod_message _mod_accuracy assert.h
+velocity_verlet.o = velocity_verlet.o $(allocate.h) $(_mod_fileid) $(_mod_thermostat) $(_mod_message) $(_mod_accuracy) $(assert.h)
+_mod_velocityverlet: velocity_verlet.o
+_mod_velocityverlet = $(velocity_verlet.o)
+

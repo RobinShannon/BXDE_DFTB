@@ -1,0 +1,20 @@
+conjgrad.o: conjgrad.F90 _mod_accuracy assert.h allocate.h _mod_linemin
+conjgrad.o = conjgrad.o $(_mod_accuracy) $(assert.h) $(allocate.h) $(_mod_linemin)
+_mod_conjugategradient: conjgrad.o
+_mod_conjugategradient = $(conjgrad.o)
+
+geoopt.o: geoopt.F90 _mod_conjugategradient _mod_steepestdescent _mod_accuracy allocate.h
+geoopt.o = geoopt.o $(_mod_conjugategradient) $(_mod_steepestdescent) $(_mod_accuracy) $(allocate.h)
+_mod_geoopt: geoopt.o
+_mod_geoopt = $(geoopt.o)
+
+linmin.o: linmin.F90 _mod_accuracy assert.h allocate.h _mod_constants
+linmin.o = linmin.o $(_mod_accuracy) $(assert.h) $(allocate.h) $(_mod_constants)
+_mod_linemin: linmin.o
+_mod_linemin = $(linmin.o)
+
+stepdesc.o: stepdesc.F90 _mod_accuracy assert.h allocate.h
+stepdesc.o = stepdesc.o $(_mod_accuracy) $(assert.h) $(allocate.h)
+_mod_steepestdescent: stepdesc.o
+_mod_steepestdescent = $(stepdesc.o)
+

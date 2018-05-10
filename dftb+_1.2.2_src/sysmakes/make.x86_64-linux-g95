@@ -1,0 +1,45 @@
+# -*- makefile -*-
+############################################################################
+# System dependent Makefile options for
+# Linux, g95 (0.92) + standard lapack
+############################################################################
+
+# Fortran 90 compiler
+FC90 = g95
+
+# Options for the Fortran 90 compiler 
+FC90OPT = -O2 -openmp -funroll-all-loops
+
+# Preprocessor (leave empty, if the compiler has a built in preprocessor)
+CPP = cpp -traditional
+
+# Options for preprocessing
+CPPOPT = -DDEBUG=$(DEBUG)
+
+# Postprocessing of the preprocessor output (add-on pipe)
+CPPPOST = $(ROOT)/utils/fpp/fpp.sh noln2
+
+# Linker
+LN = $(FC90)
+
+# Linker options
+LNOPT =
+
+# Override options for different DEBUG modes
+ifeq ($(DEBUG),1)
+    FC90OPT = -g -Wall -pedantic -fbounds-check
+endif
+ifeq ($(DEBUG),2)
+    FC90OPT = -g -Wall -pedantic -fbounds-check
+endif
+ifeq ($(DEBUG),3)
+    FC90OPT = -g -Wall -pedantic -fbounds-check
+endif
+
+# Library options in general
+G95LIBDIR = /usr/local/lib/blas_lapack/g95
+LIBOPT = -L$(G95LIBDIR)
+
+# How to link specific libraries
+LIB_LAPACK = -llapack
+LIB_BLAS = -lblas

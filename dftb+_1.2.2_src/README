@@ -1,0 +1,44 @@
+DFTB+
+=====
+
+This directory contains the source for the DFTB+ code. You should carry
+out the following steps in order to compile the code:
+
+1) Look in the sysmakes/ subdirectory for a makefile for your
+   architecture. Eventually, you'll have to edit those makefiles, to
+   contain the right settings for your architecture. If none of them
+   is corresponding to your architecture, create your own in the
+   sysmakes/ directory using the make.generic template. The makefile
+   you create should have the name "make.<name_of_your_architecture>".
+
+2) Copy the file Makefile.user.template to Makefile.user (current
+   directory). Set the ARCH variable in Makefile.user to the one
+   corresponding to your architecture. Override any settings of the
+   make system you would like to change (e.g. where to place the
+   object files, location of the autotest system, etc.).
+
+3) Change to the prg_dftb/ subdirectory and type 'make distclean' to
+   get rid of any remnants from an previous compilation. (Make sure,
+   you are using GNU make >= 3.79.1)
+
+3) Invoke make without any arguments in the prg_dftb/ directory. After
+   successfull compilation, your binary (dftb+) will appear in the
+   directory _obj_$(ARCH). If you did not change the value of the
+   OBJDIR_PARENT variable, this directory is created directly in
+   prg_dftb, otherwise in the directory specified in OBJDIR_PARENT. If
+   you issue 'make install', the binary is copied to the directory
+   specified in INSTALLDIR (default: prg_dftb/).
+
+4) In order to test your binary, you should download the autotest
+   system. Uncomment the variable PRGDFTB_TESTDIR in Makefile.user and
+   set it to the directory of the autotest suite. The default setting
+   is $(ROOT)/../autotest, where $(ROOT) is the source directory of
+   dftb+ (the current directory). Enter the prg_dftb/ directory and
+   type 'make test'. (You need Python, Version >= 2.3, in order to run
+   the autotest program.)
+
+
+
+Note for developers with SVN access:
+  Do not put any personal configurations in the sysmakes/* files. Use
+  Makefile.user to override defaults. 

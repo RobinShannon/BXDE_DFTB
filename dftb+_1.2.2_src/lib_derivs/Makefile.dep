@@ -1,0 +1,5 @@
+numericalDerivs.o: numericalDerivs.F90 _mod_accuracy assert.h allocate.h
+numericalDerivs.o = numericalDerivs.o $(_mod_accuracy) $(assert.h) $(allocate.h)
+_mod_numderivs2: numericalDerivs.o
+_mod_numderivs2 = $(numericalDerivs.o)
+

@@ -1,0 +1,45 @@
+# -*- makefile -*-
+############################################################################
+# System dependent Makefile options for
+# Linux, GNU gfortran compiler
+############################################################################
+
+# Fortran 90 compiler
+FC90 = gfortran
+
+# Options for the Fortran 90 compiler 
+FC90OPT = -O3 -funroll-all-loops 
+
+# Preprocessor (leave empty, if the compiler has a built in preprocessor)
+CPP = cpp -traditional
+
+# Options for preprocessing
+CPPOPT = -DDEBUG=$(DEBUG)
+
+# Postprocessing of the preprocessor output (add-on pipe)
+CPPPOST = $(ROOT)/utils/fpp/fpp.sh noln2
+
+# Linker
+LN = $(FC90)
+
+# Linker options
+#LNOPT = -static
+
+# Override options for different DEBUG modes
+ifeq ($(DEBUG),1)
+    FC90OPT = -g
+endif
+ifeq ($(DEBUG),2)
+    FC90OPT = -g
+endif
+ifeq ($(DEBUG),3)
+    CPPOPT = -DDEBUG=$(DEBUG) -DEXTERNALERFC
+    FC90OPT = -g -std=f95 -Wall -Wextra -fbounds-check # -fstack-check
+endif
+
+# Library options in general
+LIBOPT = -L/usr/local/lib
+
+# How to link specific libraries
+LIB_BLAS   = -lcblas -lf77blas -latlas -lg2c
+LIB_LAPACK = -llapack

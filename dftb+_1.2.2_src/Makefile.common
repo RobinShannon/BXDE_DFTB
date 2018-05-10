@@ -1,0 +1,150 @@
+############################################################################
+#
+#   General purpose Fortran 90 project Makefile
+#
+############################################################################
+#
+# $(INSTALLDIR) $(SRCDIR), $(ROOT) and $(OBJDIR) passed from Makefile.objdir
+# $(TARGETS) is to be defined in the calling GNUmakefile
+
+# clear suffixes
+.SUFFIXES:
+
+# Set some defaults
+DEBUG = 0
+FC90CLEAN = *.mod
+
+# How to tell the preprocessor to look for includes
+#   (should really be the same on most architectures)
+CPPINC = -I
+
+
+# Include user customization to set simply expanded (immediate) variables.
+#   (those assigned using ":="; cf. info:/make/Flavors)
+USERMAKE = $(ROOT)/Makefile.user
+include $(USERMAKE)
+
+# Minimal sanity check of system and user compiler settings
+ifeq ($(strip $(FC90)),)
+    $(error make: FC90 not set -- correct ARCH or create ../sysmakes/make.$(ARCH))
+endif
+
+############################################################################
+#  Paths for source and includes
+############################################################################
+
+LIB_SRC := $(wildcard $(ROOT)/lib_*)
+INC_SRC := $(ROOT)/includes
+EXT_SRC := $(wildcard $(ROOT)/ext_*)
+
+SRCDIRS := $(LIB_SRC) $(INC_SRC) $(EXT_SRC) $(SRCDIR)
+
+vpath % $(SRCDIRS)
+
+
+############################################################################
+#  Targets
+############################################################################
+
+.PHONY: clean install uninstall
+
+clean:
+	-rm -f *.o *.f90 _mod_* $(FC90CLEAN) _dependencies
+
+install: $(TARGETS)
+	chmod a+x $^
+	cp -p $^ $(INSTALLDIR)
+
+uninstall:
+	-rm -f $(addprefix $(strip $(INSTALLDIR))/,$(TARGETS))
+
+
+############################################################################
+# Dependencies
+############################################################################
+
+# All possible dependency files to include
+DEPFILES := $(addsuffix /Makefile.dep,$(SRCDIRS)) \
+            $(addsuffix /Makefile.local,$(SRCDIRS))
+
+# Sort out those really existing
+EXISTING_DEPFILES := $(foreach dep,$(DEPFILES),$(wildcard $(dep)))
+
+# Rule for creating the dependency file
+_dependencies: $(EXISTING_DEPFILES)
+	echo "" > $@
+	for dep in $^; do $(CPP) $(CPPOPT) $$dep >> $@; done
+
+# Include dependency file unless only cleaning targets are specified which do
+# not require it (NODEPTARGETS can be specified in the GNUmakefiles)
+INCLUDE_DEP := 1
+ifneq ($(filter clean uninstall $(NODEPTARGETS),$(MAKECMDGOALS)),)
+  ifeq ($(filter-out clean uninstall $(NODEPTARGETS),$(MAKECMDGOALS)),)
+    INCLUDE_DEP :=
+  endif
+endif
+ifneq ($(INCLUDE_DEP),)
+  -include _dependencies
+endif
+
+
+############################################################################
+#  Implicit rules
+############################################################################
+
+# Create -Iinclude options for the preprocessor
+define inc-opts
+$(patsubst %,$(CPPINC)%,$(dir $<) $(INC_SRC))
+endef
+
+#  If no external preprocessor had been specified -> direct compilation
+#  otherwise -> compile in two steps
+
+ifeq ($(strip $(CPP)),)
+%.o: %.F90
+	$(FC90) $(CPPOPT) $(inc-opts) $(FC90OPT) -o $@ -c $<
+else
+%.f90: %.F90
+    ifeq ($(strip $(CPPPOST)),)
+	$(CPP) $(CPPOPT) $(inc-opts) $< > $@
+    else
+	$(CPP) $(CPPOPT) $(inc-opts) $< | $(CPPPOST) > $@
+    endif
+%.o: %.f90
+	$(FC90) $(FC90OPT) -o $@ -c $<
+endif
+
+_mod_%:
+	touch $@
+
+############################################################################
+# Misc.
+############################################################################
+
+# Build list of external libraries needed for current target (deferred!)
+#
+#  Technique: If any prerequisite ($^) occurs in $(NEED_FOO), link $(LIB_FOO).
+#  NEED_FOO is to be set in <sourcedir of prerequisite>/Makefile.local .
+#  Order matters - list libraries in link order: higher-level ones first.
+#
+#  NB: Using $(if ..) would be more clean but is broken in older gmake:
+#	L_LIBS += $(if $(filter $(NEED_BLAS), $^), $(LIB_BLAS))
+#
+L_LIBS += $(patsubst %,$(LIB_LAPACK),$(firstword $(filter $(NEED_LAPACK),$^)))
+L_LIBS += $(patsubst %,$(LIB_BLAS),  $(firstword $(filter $(NEED_BLAS),$^)))
+
+# Prefix this list, when non-empty, with general library options
+O_LIBS = $(patsubst %, $(LIBOPT), $(firstword $(L_LIBS)))
+
+# abbrev. for target linking
+define link-target
+$(LN) $(LNOPT) -o $@ $^ $(O_LIBS) $(L_LIBS)
+endef
+
+# Include local makefile once again to override rules, defs and deferred vars
+include $(USERMAKE)
+
+
+### Local Variables:
+### mode:makefile
+### End:

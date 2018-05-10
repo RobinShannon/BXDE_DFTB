@@ -1,0 +1,42 @@
+# -*- makefile -*-
+############################################################################
+# Local makefile settings
+#
+# This is the place for including your system dependent makefile and
+# for overriding the settings in that or the default settings.
+#
+# You must rename this file to Makefile.user
+#
+#############################################################################
+
+# Set your architecture. Make sure, that 'sysmakes/make.$(ARCH)' exists for
+# you architecture. If not, create your own using 'sysmakes/make.generic'
+# as template.
+ARCH = make.x86_64-linux-gfortran
+
+# Include system specific settings
+include $(ROOT)/sysmakes/make.$(ARCH)
+
+
+############################################################################
+# Overriding standard options:
+############################################################################
+
+## Set alternative path for the autotest directory
+#PRGDFTB_TESTDIR = $(ROOT)/../autotest
+
+## Set alternative file containing the name of the tests to run
+#PRGDFTB_TESTFILE = $(PRGDFTB_TESTDIR)/tests
+
+## Change directory, where the _obj* directory for the object files is created
+#OBJDIR_PARENT =
+
+## Change suffix after '_obj' for the object directory name
+#OBJDIR_SUFFIX = _$(ARCH)
+
+## Set directory, where binary should be copied when issuing 'make install'
+#INSTALLDIR = .
+
+
+## Uncomment to keep intermediate files in OBJDIR (for debug only!)
+#.PRECIOUS: %.f90 %.F %.f %.c

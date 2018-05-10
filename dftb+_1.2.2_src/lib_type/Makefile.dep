@@ -1,0 +1,45 @@
+common_types.o: common_types.F90 _mod_accuracy allocate.h
+common_types.o = common_types.o $(_mod_accuracy) $(allocate.h)
+_mod_commontypes: common_types.o
+_mod_commontypes = $(common_types.o)
+
+fifo.o: fifo.F90 _mod_accuracy _mod_fileid assert.h allocate.h
+fifo.o = fifo.o $(_mod_accuracy) $(_mod_fileid) $(assert.h) $(allocate.h)
+_mod_fifo: fifo.o
+_mod_fifo = $(fifo.o)
+
+general_list.o: general_list.F90 assert.h allocate.h
+general_list.o = general_list.o $(assert.h) $(allocate.h)
+_mod_generallist: general_list.o
+_mod_generallist = $(general_list.o)
+
+linkedlist.o: linkedlist.F90 charmc.inc allocate.h intr1.inc assert.h real.inc realr1.inc int.inc charlc.inc _mod_accuracy
+linkedlist.o = linkedlist.o $(charmc.inc) $(allocate.h) $(intr1.inc) $(assert.h) $(real.inc) $(realr1.inc) $(int.inc) $(charlc.inc) $(_mod_accuracy)
+_mod_linkedlist: linkedlist.o
+_mod_linkedlist = $(linkedlist.o)
+
+old_sk_data.o: old_sk_data.F90 _mod_fileid allocate.h _mod_reppoly _mod_repspline _mod_message _mod_accuracy assert.h _mod_constants
+old_sk_data.o = old_sk_data.o $(_mod_fileid) $(allocate.h) $(_mod_reppoly) $(_mod_repspline) $(_mod_message) $(_mod_accuracy) $(assert.h) $(_mod_constants)
+_mod_oldskdata: old_sk_data.o
+_mod_oldskdata = $(old_sk_data.o)
+
+stringlist.o: stringlist.F90 _mod_m_strings assert.h allocate.h
+stringlist.o = stringlist.o $(_mod_m_strings) $(assert.h) $(allocate.h)
+_mod_stringlist: stringlist.o
+_mod_stringlist = $(stringlist.o)
+
+type_geometry.o: type_geometry.F90 _mod_accuracy allocate.h
+type_geometry.o = type_geometry.o $(_mod_accuracy) $(allocate.h)
+_mod_typegeometry: type_geometry.o
+_mod_typegeometry = $(type_geometry.o)
+
+type_geometry_hsd.o: type_geometry_hsd.F90 _mod_tokenreader allocate.h _mod_charmanip _mod_flib_wxml _mod_stringlist _mod_hsdutils _mod_linkedlist _mod_hsdutils2 _mod_flib_dom _mod_typegeometry _mod_lapackroutines _mod_unitconversion
+type_geometry_hsd.o = type_geometry_hsd.o $(_mod_tokenreader) $(allocate.h) $(_mod_charmanip) $(_mod_flib_wxml) $(_mod_stringlist) $(_mod_hsdutils) $(_mod_linkedlist) $(_mod_hsdutils2) $(_mod_flib_dom) $(_mod_typegeometry) $(_mod_lapackroutines) $(_mod_unitconversion)
+_mod_typegeometryhsd: type_geometry_hsd.o
+_mod_typegeometryhsd = $(type_geometry_hsd.o)
+
+wrapped_pointers.o: wrapped_pointers.F90 _mod_accuracy
+wrapped_pointers.o = wrapped_pointers.o $(_mod_accuracy)
+_mod_wrappedpointers: wrapped_pointers.o
+_mod_wrappedpointers = $(wrapped_pointers.o)
+

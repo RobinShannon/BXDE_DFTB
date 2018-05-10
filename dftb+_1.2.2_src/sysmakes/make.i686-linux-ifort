@@ -1,0 +1,51 @@
+# -*- makefile -*-
+############################################################################
+# System dependent Makefile options for
+# Linux, ifort (11.1) + MKL (10.2.3)
+############################################################################
+
+# Fortran 90 compiler
+FC90 = ifort
+
+# Options for the Fortran 90 compiler 
+FC90OPT = -O2 -xW -openmp -ip 
+
+# Preprocessor
+CPP = cpp -traditional
+
+# Options for preprocessing
+CPPOPT = -DDEBUG=$(DEBUG)
+
+# Postprocessing of the preprocessor output (add-on pipe)
+CPPPOST = $(ROOT)/utils/fpp/fpp.sh nocntln
+
+# Linker
+LN = $(FC90)
+
+# Linker options
+LNOPT = -static
+
+# Override options for different DEBUG modes
+ifeq ($(DEBUG),1)
+    FC90OPT = -g -warn all -std95
+endif
+ifeq ($(DEBUG),2)
+    FC90OPT = -g -warn all -std95
+endif
+ifeq ($(DEBUG),3)
+    FC90OPT = -g -CB -warn all -std95
+endif
+
+# Library options in general
+MKL_LIBDIR = /opt/intel/mkl/10.2.3.029/lib/32
+LIBOPT = -L$(MKL_LIBDIR) 
+
+# How to link specific libraries
+LIB_BLAS = -Wl,--start-group \
+  $(MKL_LIBDIR)/libmkl_intel.a \
+  $(MKL_LIBDIR)/libmkl_intel_thread.a \
+  $(MKL_LIBDIR)/libmkl_core.a \
+  -Wl,--end-group \
+  -liomp5 -lpthread
+LIB_LAPACK =
+

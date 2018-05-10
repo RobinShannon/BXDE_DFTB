@@ -1,0 +1,46 @@
+# -*- makefile -*-
+############################################################################
+# System dependent Makefile options for
+# OSF1, Compaq compiler
+############################################################################
+
+# Fortran 90 compiler
+FC90 = f95
+
+# Options for the Fortran 90 compiler
+FC90OPT = -fast -check nopower
+
+# Preprocessor
+CPP = cpp -C
+
+# Options for preprocessing
+CPPOPT = -DDEBUG=$(DEBUG) -DEXTERNALERFC -DEXPTRAP
+
+# Post processing the preprocessor (work around the compaq preprocessor bug)
+CPPPOST = $(ROOT)/utils/fpp/fpp.sh nocntln | sed 's/^[ \t]*&!/\& !/g'
+
+# Linker
+LN = $(FC90)
+
+# Linker options
+LNOPT =
+
+# Override options for different DEBUG modes
+ifeq ($(DEBUG),1)
+    FC90OPT = -g -check nopower
+endif
+ifeq ($(DEBUG),2)
+    FC90OPT = -g -check nopower
+endif
+ifeq ($(DEBUG),3)
+    FC90OPT = -g -check nopower -check bounds -check format \
+		-check overflow -check underflow -O0
+endif
+
+# Library options in general
+# Normally, DXML would do the job, but we need LAPACK3.
+LIBOPT =
+
+# How to link specific libraries
+LIB_BLAS   = -lblas
+LIB_LAPACK = -llapack

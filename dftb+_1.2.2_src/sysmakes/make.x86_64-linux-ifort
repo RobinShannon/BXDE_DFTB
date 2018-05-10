@@ -1,0 +1,50 @@
+# -*- makefile -*-
+############################################################################
+# System dependent Makefile options for
+# Linux, Intel Fortran Compiler + MKL (ifort 11.1, MKL 10.2)
+############################################################################
+
+# Fortran 90 compiler
+FC90 = ifort
+
+# Options for the Fortran 90 compiler 
+FC90OPT = -O2 -xW -ip
+
+# Preprocessor (leave empty, if the compiler has a built in preprocessor)
+CPP = cpp -traditional
+
+# Options for preprocessing
+CPPOPT = -DDEBUG=$(DEBUG)
+
+# Postprocessing of the preprocessor output (add-on pipe)
+CPPPOST = $(ROOT)/utils/fpp/fpp.sh nocntln
+
+# Linker
+LN = $(FC90) -static 
+
+# Linker options
+LNOPT = $(FC90OPT)
+
+# Override options for different DEBUG modes
+ifeq ($(DEBUG),1)
+    FC90OPT = -g -warn all -std95
+endif
+ifeq ($(DEBUG),2)
+    FC90OPT = -g -warn all -std95
+endif
+ifeq ($(DEBUG),3)
+    FC90OPT = -g -CB -warn all -std95
+endif
+
+# Library options in general
+MKL_LIBDIR = /cm/shared/apps/intel-cluster-studio/composer_xe_2013.1.117//mkl/lib/intel64
+LIBOPT = -L$(MKL_LIBDIR)
+
+# How to link specific libraries
+LIB_BLAS   = -Wl,--start-group \
+  -lmkl_intel_lp64 \
+  -lmkl_intel_thread \
+  -lmkl_core \
+  -Wl,--end-group \
+  -liomp5 -lpthread
+LIB_LAPACK = 

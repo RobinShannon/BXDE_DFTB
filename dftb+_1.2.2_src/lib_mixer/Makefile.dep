@@ -1,0 +1,25 @@
+anderson_mixer.o: anderson_mixer.F90 _mod_accuracy _mod_lapackroutines assert.h allocate.h
+anderson_mixer.o = anderson_mixer.o $(_mod_accuracy) $(_mod_lapackroutines) $(assert.h) $(allocate.h)
+_mod_andersonmixer: anderson_mixer.o
+_mod_andersonmixer = $(anderson_mixer.o)
+
+broyden_mixer.o: broyden_mixer.F90 allocate.h _mod_lapackroutines _mod_fifo _mod_message _mod_accuracy assert.h
+broyden_mixer.o = broyden_mixer.o $(allocate.h) $(_mod_lapackroutines) $(_mod_fifo) $(_mod_message) $(_mod_accuracy) $(assert.h)
+_mod_broydenmixer: broyden_mixer.o
+_mod_broydenmixer = $(broyden_mixer.o)
+
+diis_mixer.o: diis_mixer.F90 _mod_accuracy _mod_lapackroutines assert.h allocate.h
+diis_mixer.o = diis_mixer.o $(_mod_accuracy) $(_mod_lapackroutines) $(assert.h) $(allocate.h)
+_mod_diismixer: diis_mixer.o
+_mod_diismixer = $(diis_mixer.o)
+
+mixer_adt.o: mixer_adt.F90 _mod_broydenmixer allocate.h assert.h _mod_diismixer _mod_simplemixer _mod_andersonmixer _mod_accuracy
+mixer_adt.o = mixer_adt.o $(_mod_broydenmixer) $(allocate.h) $(assert.h) $(_mod_diismixer) $(_mod_simplemixer) $(_mod_andersonmixer) $(_mod_accuracy)
+_mod_mixer: mixer_adt.o
+_mod_mixer = $(mixer_adt.o)
+
+simple_mixer.o: simple_mixer.F90 _mod_accuracy assert.h allocate.h
+simple_mixer.o = simple_mixer.o $(_mod_accuracy) $(assert.h) $(allocate.h)
+_mod_simplemixer: simple_mixer.o
+_mod_simplemixer = $(simple_mixer.o)
+

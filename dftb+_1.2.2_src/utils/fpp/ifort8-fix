@@ -1,0 +1,32 @@
+eval 'exec perl -S $0 ${1+"$@"}'
+    if $running_under_some_shell;
+# $Id: ifort8-fix,v 1.2 2005/01/31 09:04:26 stern Exp $
+# ifort-8.x preprocessor/compiler bug workaround.
+#
+# Issue:
+#	The compiler does not recognise the call keyword when immediately
+#	followed by a line continuation symbol, as in "call&".
+#	Also applies when the "call" keyword itself is broken across lines.
+#
+# Workaround:
+#	Break line before critical location.
+#
+# Caveat:
+#	Does not attempt to stay away from comments or strings.
+
+{
+    local $/;	# slurp
+    $_ = <ARGV>;
+
+    # Do the work; make sure to maintain line numbers.
+    s/( c&\n&all | ca&\n&ll | cal&\n&l )/&\n& call/gx;	# preparatory cleanup
+    s/call&\n/call &\n/g;				# fix the issue
+
+    # Bonus:  Shut up warning:
+    #	"Continuation character illegal as first non_blank in statement"
+    s/;\s*&\n(&?)/\n/mg;
+
+    print $_;
+}
+
+# vim:syntax=perl:

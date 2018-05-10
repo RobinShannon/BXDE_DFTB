@@ -1,0 +1,47 @@
+# -*- makefile -*-
+############################################################################
+# System dependent Makefile options for
+# Linux, gfortran (4.4.3) + Atlas (3.6.0)
+############################################################################
+
+# Fortran 90 compiler
+FC90 = gfortran
+
+# Options for the Fortran 90 compiler 
+FC90OPT = -O2 -funroll-all-loops -fall-intrinsics
+
+# Preprocessor (leave empty, if the compiler has a built in preprocessor)
+CPP = cpp -traditional
+
+# Options for preprocessing
+CPPOPT = -DDEBUG=$(DEBUG) #-DEXTERNALERFC
+
+# Postprocessing of the preprocessor output (add-on pipe)
+CPPPOST = $(ROOT)/utils/fpp/fpp.sh general
+
+# Linker
+LN = $(FC90)
+
+# Linker options
+LNOPT = -static
+
+# Override options for different DEBUG modes
+ifeq ($(DEBUG),1)
+    FC90OPT = -g -Wall -std=f2003 -pedantic -fall-intrinsics -fbounds-check
+endif
+ifeq ($(DEBUG),2)
+    FC90OPT = -g -Wall -std=f2003 -pedantic -fall-intrinsics -fbounds-check
+endif
+ifeq ($(DEBUG),3)
+    FC90OPT = -g -Wall -std=f2003 -pedantic -fall-intrinsics -fbounds-check
+endif
+
+# Library options in general
+ATLASDIR = /cm/shared/libraries/gnu_builds/atlas-3.10.1/lib
+LIBOPT = -L$(ATLASDIR)
+
+# How to link specific libraries
+LIB_LAPACK = -llapack
+LIB_BLAS = -lf77blas -latlas -lcblas 
+# Threaded version may work as well
+# LIB_BLAS =  -llibptcblas -latlas -lptf77blas

@@ -1,0 +1,46 @@
+# -*- makefile -*-
+############################################################################
+# System dependent Makefile options for
+# Linux, Intel Fortran Compiler (version 8.x) on an SGI itanium
+############################################################################
+
+# Fortran 90 compiler
+FC90 = ifort
+
+# Options for the Fortran 90 compiler 
+FC90OPT = -O0
+
+# Preprocessor
+CPP = $(FC90) -E
+
+# Options for preprocessing
+CPPOPT = -DDEBUG=$(DEBUG)
+
+# Postprocessing of the preprocessor output (add-on pipe)
+CPPPOST = $(ROOT)/utils/fpp/ifort8-fix
+
+# Linker
+LN = $(FC90)
+
+# Linker options
+LNOPT = $(FC90OPT)
+
+# Override options for different DEBUG modes
+ifeq ($(DEBUG),1)
+    FC90OPT = -g
+endif
+ifeq ($(DEBUG),2)
+    FC90OPT = -g
+endif
+ifeq ($(DEBUG),3)
+    FC90OPT = -g -CB
+endif
+
+# Library options in general
+MKL_LIBDIR = 
+LIBOPT = -L$(MKL_LIBDIR)
+
+# How to link specific libraries
+LIB_BLAS   = -lscs_mp -lscs_mp
+LIB_LAPACK = 
+

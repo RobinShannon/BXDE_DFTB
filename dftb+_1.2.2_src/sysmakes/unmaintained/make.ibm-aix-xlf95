@@ -1,0 +1,45 @@
+# -*- makefile -*-
+############################################################################
+# System dependent Makefile options for
+# AIX, IBM xlf compiler (version 3.1)
+############################################################################
+
+# Fortran 90 compiler
+# cf. http://www.nersc.gov/nusers/resources/software/ibm/xlf.php
+FC90 = xlf95 -qsuffix=f=f90 # -qsuppress=cmpmsg
+
+# Optimization flags for the Fortran 90 compiler
+FC90OPT = -O3 -qstrict -qarch=auto -qtune=auto
+
+# Preprocessor (leave empty, if the compiler has a built in preprocessor)
+CPP = cpp -traditional
+
+# Options for preprocessing
+CPPOPT = -WF,-DDEBUG=$(DEBUG)
+
+# Postprocessing of the preprocessor output (add-on pipe)
+CPPPOST = $(ROOT)/utils/fpp/fpp.sh noln2
+
+# Linker
+LN = $(FC90)
+
+# Linker options
+LNOPT =
+
+# Override options for different DEBUG modes
+ifeq ($(DEBUG),1)
+    FC90OPT = -g
+endif
+ifeq ($(DEBUG),2)
+    FC90OPT = -g
+endif
+ifeq ($(DEBUG),3)
+    FC90OPT = -g -C
+endif
+
+# Library options in general
+LIBOPT = -L/aws/numerics/lapack
+
+# How to link specific libraries
+LIB_BLAS   =  -lblas
+LIB_LAPACK = -llapack_pwr4_nocci

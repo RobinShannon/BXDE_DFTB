@@ -1,0 +1,88 @@
+Geometry = GenFormat {
+ 17  C
+  H C O
+     1    2   -0.53808        0.11130       1.02410
+     2    2   -1.26091        0.08531      -0.09483
+     3    1   -2.18364       -0.48358      -0.10713
+     4    2    0.80833        0.78649       1.14061
+     5    1    0.89200        1.26484       2.11684
+     6    1    0.94755        1.55699       0.38135
+     7    2   -0.96672       -0.62457       2.25708
+     8    1   -0.16831       -1.29632       2.57430
+     9    1   -1.13860        0.07824       3.07444
+    10    1   -1.87398       -1.20120       2.09429
+    11    2   -0.87591        0.71957      -1.38743
+    12    3   -0.19506       -0.23392      -2.26207
+    13    3    0.96239       -0.56680      -1.80476 
+    14    1   -0.20321        1.56499      -1.27942
+    15    1   -1.74259        1.01395      -1.97371
+    16    3    1.84331       -0.17215       1.08032
+    17    1    1.81965       -0.54826       0.19371
+
+}
+
+Driver = VelocityVerlet {
+  Steps = 10000000
+  TimeStep [Femtosecond] = 0.10000000000000
+  Thermostat = None {
+    InitialTemperature [Kelvin] = 500
+  }
+  OutputPrefix = "geom.out"
+  MDRestartFrequency = 50
+  Velocities = {}
+  bxdEquil = 100
+  BXD = Yes
+  COMbxd = Yes
+  restrain = Yes
+  minCOM = 2.9
+  COMindex = 11
+  bxdEvents = 0
+  bxdLower = 0.000
+  bxdUpper = 0.005
+  bxdBoxes = 500
+  adaptive = Yes
+  adaptiveLimit = 100
+  rxnWindow = 1000
+  EndOnReaction = Yes
+  maxE = 0.2
+  friction = 0.000005
+  tempK = 500
+
+}
+
+Hamiltonian = DFTB {
+  SCC = Yes
+  SCCTolerance = 1.00E-5
+  MaxSCCIterations = 1000
+  MaxAngularMomentum = {
+    H = "s"
+    C = "p"
+    O = "p"
+  }
+
+  Filling = Fermi {
+    Temperature [Kelvin] = 2000
+  }
+
+  SlaterKosterFiles = {
+    H-H = "H-H.skf"
+    C-C = "C-C.skf"
+    O-O = "O-O.skf"
+    C-H = "C-H.skf"
+    O-H = "O-H.skf"
+    C-O = "C-O.skf"
+    H-C = "H-C.skf"
+    H-O = "H-O.skf"
+    O-C = "O-C.skf"
+  }
+}
+
+
+Options = {
+  WriteAutotestTag = Yes
+  RandomSeed = 0
+}
+
+ParserOptions = {
+  ParserVersion = 3
+}

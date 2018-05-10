@@ -1,0 +1,55 @@
+charmanip.o: charmanip.F90 assert.h
+charmanip.o = charmanip.o $(assert.h)
+_mod_charmanip: charmanip.o
+_mod_charmanip = $(charmanip.o)
+
+fileid.o: fileid.F90 _mod_message
+fileid.o = fileid.o $(_mod_message)
+_mod_fileid: fileid.o
+_mod_fileid = $(fileid.o)
+
+formatout.o: formatout.F90 _mod_sparse2dense _mod_fileid allocate.h _mod_lapackroutines _mod_accuracy assert.h _mod_constants
+formatout.o = formatout.o $(_mod_sparse2dense) $(_mod_fileid) $(allocate.h) $(_mod_lapackroutines) $(_mod_accuracy) $(assert.h) $(_mod_constants)
+_mod_formatout: formatout.o
+_mod_formatout = $(formatout.o)
+
+hsdparser.o: hsdparser.F90 _mod_xmlutils _mod_message _mod_m_strings _mod_flib_wxml _mod_charmanip _mod_flib_dom _mod_fileid assert.h allocate.h
+hsdparser.o = hsdparser.o $(_mod_xmlutils) $(_mod_message) $(_mod_m_strings) $(_mod_flib_wxml) $(_mod_charmanip) $(_mod_flib_dom) $(_mod_fileid) $(assert.h) $(allocate.h)
+_mod_hsdparser: hsdparser.o
+_mod_hsdparser = $(hsdparser.o)
+
+hsdutils.o: hsdutils.F90 _mod_hsdparser _mod_accuracy allocate.h _mod_linkedlist _mod_charmanip _mod_tokenreader _mod_stringlist _mod_m_strings _mod_flib_wxml _mod_message _mod_flib_dom assert.h _mod_xmlutils
+hsdutils.o = hsdutils.o $(_mod_hsdparser) $(_mod_accuracy) $(allocate.h) $(_mod_linkedlist) $(_mod_charmanip) $(_mod_tokenreader) $(_mod_stringlist) $(_mod_m_strings) $(_mod_flib_wxml) $(_mod_message) $(_mod_flib_dom) $(assert.h) $(_mod_xmlutils)
+_mod_hsdutils: hsdutils.o
+_mod_hsdutils = $(hsdutils.o)
+
+hsdutils2.o: hsdutils2.F90 _mod_hsdparser _mod_charmanip _mod_xmlutils assert.h _mod_hsdutils _mod_message _mod_flib_dom _mod_accuracy _mod_unitconversion
+hsdutils2.o = hsdutils2.o $(_mod_hsdparser) $(_mod_charmanip) $(_mod_xmlutils) $(assert.h) $(_mod_hsdutils) $(_mod_message) $(_mod_flib_dom) $(_mod_accuracy) $(_mod_unitconversion)
+_mod_hsdutils2: hsdutils2.o
+_mod_hsdutils2 = $(hsdutils2.o)
+
+intrinsicpr.o: intrinsicpr.F90 _mod_accuracy
+intrinsicpr.o = intrinsicpr.o $(_mod_accuracy)
+_mod_intrinsicprinter: intrinsicpr.o
+_mod_intrinsicprinter = $(intrinsicpr.o)
+
+message.o: message.F90
+message.o = message.o
+_mod_message: message.o
+_mod_message = $(message.o)
+
+taggedout.o: taggedout.F90 _mod_accuracy assert.h
+taggedout.o = taggedout.o $(_mod_accuracy) $(assert.h)
+_mod_taggedoutput: taggedout.o
+_mod_taggedoutput = $(taggedout.o)
+
+tokenreader.o: tokenreader.F90 _mod_m_strings _mod_charmanip assert.h _mod_accuracy _mod_message
+tokenreader.o = tokenreader.o $(_mod_m_strings) $(_mod_charmanip) $(assert.h) $(_mod_accuracy) $(_mod_message)
+_mod_tokenreader: tokenreader.o
+_mod_tokenreader = $(tokenreader.o)
+
+xmlutils.o: xmlutils.F90 _mod_m_strings _mod_charmanip assert.h _mod_flib_dom
+xmlutils.o = xmlutils.o $(_mod_m_strings) $(_mod_charmanip) $(assert.h) $(_mod_flib_dom)
+_mod_xmlutils: xmlutils.o
+_mod_xmlutils = $(xmlutils.o)
+

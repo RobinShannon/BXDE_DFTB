@@ -1,0 +1,65 @@
+angmomentum.o: angmomentum.F90 _mod_accuracy _mod_commontypes assert.h allocate.h _mod_qm
+angmomentum.o = angmomentum.o $(_mod_accuracy) $(_mod_commontypes) $(assert.h) $(allocate.h) $(_mod_qm)
+_mod_angmomentum: angmomentum.o
+_mod_angmomentum = $(angmomentum.o)
+
+bisection.o: bisection.F90 _mod_accuracy
+bisection.o = bisection.o $(_mod_accuracy)
+_mod_bisect: bisection.o
+_mod_bisect = $(bisection.o)
+
+blasroutines.o: blasroutines.F90 _mod_accuracy assert.h
+blasroutines.o = blasroutines.o $(_mod_accuracy) $(assert.h)
+_mod_blasroutines: blasroutines.o
+_mod_blasroutines = $(blasroutines.o)
+
+eigensolver.o: eigensolver.F90 _mod_message _mod_accuracy allocate.h assert.h
+eigensolver.o = eigensolver.o $(_mod_message) $(_mod_accuracy) $(allocate.h) $(assert.h)
+_mod_eigensolver: eigensolver.o
+_mod_eigensolver = $(eigensolver.o)
+
+ext_erfc.o: ext_erfc.F90 _mod_accuracy
+ext_erfc.o = ext_erfc.o $(_mod_accuracy)
+_mod_external_erfc: ext_erfc.o
+_mod_external_erfc = $(ext_erfc.o)
+
+fact.o: fact.F90 assert.h _mod_accuracy
+fact.o = fact.o $(assert.h) $(_mod_accuracy)
+_mod_factorial: fact.o
+_mod_factorial = $(fact.o)
+
+hermite.o: hermite.F90 _mod_accuracy assert.h allocate.h
+hermite.o = hermite.o $(_mod_accuracy) $(assert.h) $(allocate.h)
+_mod_hermite: hermite.o
+_mod_hermite = $(hermite.o)
+
+interpolation.o: interpolation.F90 _mod_accuracy assert.h _mod_message
+interpolation.o = interpolation.o $(_mod_accuracy) $(assert.h) $(_mod_message)
+_mod_interpolation: interpolation.o
+_mod_interpolation = $(interpolation.o)
+
+lapackroutines.o: lapackroutines.F90 _mod_accuracy assert.h allocate.h _mod_message
+lapackroutines.o = lapackroutines.o $(_mod_accuracy) $(assert.h) $(allocate.h) $(_mod_message)
+_mod_lapackroutines: lapackroutines.o
+_mod_lapackroutines = $(lapackroutines.o)
+
+qm.o: qm.F90 _mod_accuracy assert.h
+qm.o = qm.o $(_mod_accuracy) $(assert.h)
+_mod_qm: qm.o
+_mod_qm = $(qm.o)
+
+ranlux.o: ranlux.F90 _mod_accuracy assert.h allocate.h
+ranlux.o = ranlux.o $(_mod_accuracy) $(assert.h) $(allocate.h)
+_mod_ranlux: ranlux.o
+_mod_ranlux = $(ranlux.o)
+
+simple_algebra.o: simple_algebra.F90 _mod_accuracy assert.h
+simple_algebra.o = simple_algebra.o $(_mod_accuracy) $(assert.h)
+_mod_simplealgebra: simple_algebra.o
+_mod_simplealgebra = $(simple_algebra.o)
+
+sort.o: sort.F90 _mod_accuracy assert.h allocate.h
+sort.o = sort.o $(_mod_accuracy) $(assert.h) $(allocate.h)
+_mod_sorting: sort.o
+_mod_sorting = $(sort.o)
+

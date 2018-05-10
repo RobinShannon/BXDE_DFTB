@@ -1,0 +1,2 @@
+NEED_BLAS += eigensolver.o blasroutines.o lapackroutines.o
+NEED_LAPACK += eigensolver.o lapackroutines.o

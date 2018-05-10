@@ -1,0 +1,101 @@
+############################################################################
+# Makefile for compiling in object directories
+############################################################################
+#
+# $(ROOT) is to be defined in the calling GNUmakefile
+#
+# cf. /doc/devel/make.txt
+
+
+# Default compilation directories, customizable in Makefile.user
+OBJDIR_PARENT   = .
+OBJDIR_SUFFIX   = _$(ARCH)
+INSTALLDIR      = .
+
+# include user's settings
+include $(ROOT)/Makefile.user
+
+# sanity check, variable ARCH must be set
+ifeq ($(strip $(ARCH)),)
+  $(error make: ARCH not set -- create $(ROOT)/Makefile.user according to $(ROOT)/Makefile.user.template)
+endif
+
+
+#---------------------------------------------------------------------
+# end of configurable defaults
+#---------------------------------------------------------------------
+
+# CAUTION: Do not override the following variable.
+#	It is used for an "rm -rf" operation.
+OBJDIR_PREFIX	:= _obj
+
+# assemble name of the object directory
+OBJDIR		:= $(strip $(OBJDIR_PARENT))/$(OBJDIR_PREFIX)$(OBJDIR_SUFFIX)
+OBJDIR_PATTERN	:= $(strip $(OBJDIR_PARENT))/$(OBJDIR_PREFIX)*
+
+# attempt to construct relative path names as seen from $(OBJDIR)
+# abs2rel is a perl script.
+#REL_ROOT	:= $(shell $(ROOT)/utils/misc/abs2rel $(ROOT)       $(OBJDIR))
+#REL_SRCDIR	:= $(shell $(ROOT)/utils/misc/abs2rel .             $(OBJDIR))
+#REL_INSTALLDIR	:= $(shell $(ROOT)/utils/misc/abs2rel $(INSTALLDIR) $(OBJDIR))
+
+# If abs2rel failed (perl is not installed), fall back to default settings
+#ifeq ($(REL_ROOT),)
+REL_ROOT       := $(CURDIR)/$(ROOT)
+REL_SRCDIR     := $(CURDIR)
+REL_INSTALLDIR := $(INSTALLDIR)
+#endif
+
+#---------------------------------------------------------------------
+# Targets to be handled without entering OBJDIR.
+#---------------------------------------------------------------------
+# You may pre-set TARGETS_SRCDIR this near the top of calling GNUmakefile.
+
+TARGETS_PHONY = printarch srcclean distclean alldistclean
+
+TARGETS_SRCDIR += $(TARGETS_PHONY)
+
+#---------------------------------------------------------------------
+# Targets for OBJDIR
+#---------------------------------------------------------------------
+TARGETS_OBJDIR = $(filter-out $(TARGETS_SRCDIR),$(MAKECMDGOALS))
+
+# Pass the buck and twiddle thumbs.
+$(TARGETS_OBJDIR): $(OBJDIR) ; @:
+
+# Create object directory and invoke make in it.
+.PHONY: $(OBJDIR)
+$(OBJDIR):
+	@+[ -d $@ ] || mkdir -p $@
+	@+$(MAKE) -C $@ \
+	  -f $(REL_SRCDIR)/GNUmakefile -I $(REL_SRCDIR) \
+	  ROOT=$(REL_ROOT) SRCDIR=$(REL_SRCDIR) INSTALLDIR=$(REL_INSTALLDIR) \
+	  OBJDIR=$(OBJDIR) $(TARGETS_OBJDIR)
+
+# No rules for makefiles
+GNUmakefile : ;
+
+Makefile.% :: ;
+
+#---------------------------------------------------------------------
+# All other targets: handle locally
+#---------------------------------------------------------------------
+.PHONY: $(TARGETS_PHONY)
+printarch:
+	@echo ARCH=$(ARCH)
+
+# Remove backup files created by editors and cvs -- caution!
+srcclean:
+	-rm -f *~ *.bak ".#"*
+
+distclean:
+	rm -rf $(OBJDIR)
+
+alldistclean:
+	rm -rf $(OBJDIR_PATTERN)
+
+# EOF
+
+### Local Variables:
+### mode:makefile
+### End:
