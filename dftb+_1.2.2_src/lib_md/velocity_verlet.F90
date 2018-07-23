@@ -432,7 +432,7 @@ ALLOCATE_(b,(3,self%nAtom))
 ALLOCATE_(random_normal,(3,self%nAtom))
 
 !conversion = ((1e10_dp * AA__Bohr) / (1e15_dp * fs__au)) * 1.380648e-23_dp * self%temperature
-Tconv = Boltzmann * self%temperature
+Tconv = Boltzmann * 0.5_dp * self%temperature
 FricConv = self%friction / 2.418884e-2_dp
 !sigma(:,:) = sqrt(conversion * 2.0_dp * self%friction  * (1 / masses(:,:)))
 DO ll = 1,3
