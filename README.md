@@ -2,7 +2,7 @@
 
 Note: The license below covers all sofware components of the DFTB+
 package, except external software components located in the
-'external/' directory. Those external software components are not part
+'ext.../' directory. Those external software components are not part
 of the DFTB+ project and are only distributed with the DFTB+ source
 for your convenience. Please consult the license file of each external
 software component for its individual copyright information and
